@@ -1,17 +1,18 @@
 /**
  * Copyright (C) 2013 Permeance Technologies
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this program. If
  * not, see <http://www.gnu.org/licenses/>.
  */
+
 package au.com.permeance.utility.logviewer.portlets;
 
 import com.liferay.portal.kernel.log.Log;
@@ -23,116 +24,143 @@ import java.io.Writer;
 
 /**
  * LogHolder
- * 
+ *
  * @author Chun Ho <chun.ho@permeance.com.au>
  */
 public class LogHolder {
 
-    public static final Log log = LogFactoryUtil.getLog(LogHolder.class);
+	public static final Log log = LogFactoryUtil.getLog(LogHolder.class);
 
-    private static LogRunnable runnable = null;
-    private static Object writerAppenderObj = null;
-    private static RollingLogViewer viewer = null;
-    private static boolean attached = false;
+	public static synchronized void attach() throws Exception {
+		if (!isAttached()) {
+			try {
+				final ClassLoader portalClassLoader =
+					PortalClassLoaderUtil.getClassLoader();
+				final Class<?> logger = portalClassLoader.loadClass(
+					PortletConstants.LOG4J_LOGGER_CLASS);
+				final Object rootLoggerObj = logger.getMethod(
+					PortletConstants.GET_ROOT_LOGGER).invoke(null);
 
-    public static RollingLogViewer getViewer() {
-        return viewer;
-    }
+				final Class<?> patternLayout = portalClassLoader.loadClass(
+					PortletConstants.LOG4J_PATTERN_LAYOUT_CLASS);
 
-    public static synchronized void attach() throws Exception {
-        if (!isAttached()) {
-            try {
-                final ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
-                final Class logger = portalClassLoader.loadClass(PortletConstants.LOG4J_LOGGER_CLASS);
-                final Object rootLoggerObj = logger.getMethod(PortletConstants.GET_ROOT_LOGGER).invoke(null);
+				final String pattern =
+					PortletPropsValues.PERMEANCE_LOG_VIEWER_PATTERN;
 
-                final Class patternLayout = portalClassLoader.loadClass(PortletConstants.LOG4J_PATTERN_LAYOUT_CLASS);
+				final Object patternLayoutObj = patternLayout.getConstructor(
+					String.class).newInstance(pattern);
 
-                final String pattern = PortletPropsValues.PERMEANCE_LOG_VIEWER_PATTERN;
+				final CharArrayWriter pwriter = new CharArrayWriter();
+				viewer = new RollingLogViewer();
+				runnable = new LogRunnable(pwriter, viewer);
+				final Thread t = new Thread(runnable);
+				t.start();
 
-                final Object patternLayoutObj = patternLayout.getConstructor(String.class).newInstance(pattern);
+				final Class<?> writerAppender = portalClassLoader.loadClass(
+					PortletConstants.LOG4J_WRITER_APPENDER_CLASS);
 
-                final CharArrayWriter pwriter = new CharArrayWriter();
-                viewer = new RollingLogViewer();
-                runnable = new LogRunnable(pwriter, viewer);
-                final Thread t = new Thread(runnable);
-                t.start();
+				final Class<?> appender = portalClassLoader.loadClass(
+					PortletConstants.LOG4J_APPENDER_CLASS);
+				final Class<?> layout = portalClassLoader.loadClass(
+					PortletConstants.LOG4J_LAYOUT_CLASS);
+				writerAppenderObj = writerAppender.getConstructor(
+					layout, Writer.class).newInstance(patternLayoutObj,
+					pwriter);
 
-                final Class writerAppender = portalClassLoader.loadClass(PortletConstants.LOG4J_WRITER_APPENDER_CLASS);
+				logger.getMethod(
+					PortletConstants.ADD_APPENDER,
+					appender).invoke(rootLoggerObj, writerAppenderObj);
+				attached = true;
+			} catch (final Exception e) {
+				log.error(e);
 
-                final Class appender = portalClassLoader.loadClass(PortletConstants.LOG4J_APPENDER_CLASS);
-                final Class layout = portalClassLoader.loadClass(PortletConstants.LOG4J_LAYOUT_CLASS);
-                writerAppenderObj = writerAppender.getConstructor(layout, Writer.class).newInstance(patternLayoutObj, pwriter);
+				throw e;
+			}
+		}
+	}
 
-                logger.getMethod(PortletConstants.ADD_APPENDER, appender).invoke(rootLoggerObj, writerAppenderObj);
-                attached = true;
-            } catch (final Exception e) {
-                log.error(e);
-                throw e;
-            }
-        }
-    }
+	public static synchronized void detach() {
+		if (isAttached()) {
+			try {
+				runnable.setStop(true);
 
-    public static synchronized void detach() {
-        if (isAttached()) {
-            try {
-                runnable.setStop(true);
+				final ClassLoader portalClassLoader =
+					PortalClassLoaderUtil.getClassLoader();
+				final Class<?> logger = portalClassLoader.loadClass(
+					PortletConstants.LOG4J_LOGGER_CLASS);
+				final Object rootLoggerObj = logger.getMethod(
+					PortletConstants.GET_ROOT_LOGGER).invoke(null);
+				final Class<?> appender = portalClassLoader.loadClass(
+					PortletConstants.LOG4J_APPENDER_CLASS);
+				logger.getMethod(
+					PortletConstants.REMOVE_APPENDER,
+					appender).invoke(rootLoggerObj, writerAppenderObj);
+			} catch (final Exception e) {
+				log.warn(e);
+			}
+		}
 
-                final ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
-                final Class logger = portalClassLoader.loadClass(PortletConstants.LOG4J_LOGGER_CLASS);
-                final Object rootLoggerObj = logger.getMethod(PortletConstants.GET_ROOT_LOGGER).invoke(null);
-                final Class appender = portalClassLoader.loadClass(PortletConstants.LOG4J_APPENDER_CLASS);
-                logger.getMethod(PortletConstants.REMOVE_APPENDER, appender).invoke(rootLoggerObj, writerAppenderObj);
-            } catch (final Exception e) {
-                log.warn(e);
-            }
-        }
-        runnable = null;
-        viewer = null;
-        writerAppenderObj = null;
-        attached = false;
-    }
+		runnable = null;
+		viewer = null;
+		writerAppenderObj = null;
+		attached = false;
+	}
 
-    public static boolean isAttached() {
-        return attached;
-    }
+	public static RollingLogViewer getViewer() {
+		return viewer;
+	}
 
-    public static class LogRunnable implements Runnable {
-        private final RollingLogViewer viewer;
-        private final CharArrayWriter writer;
-        private boolean stop = false;
+	public static boolean isAttached() {
+		return attached;
+	}
 
-        public LogRunnable(CharArrayWriter writer, RollingLogViewer viewer) {
-            this.writer = writer;
-            this.viewer = viewer;
-        }
+	public static class LogRunnable implements Runnable {
 
-        public void setStop(final boolean stop) {
-            this.stop = stop;
-        }
+		public LogRunnable(CharArrayWriter writer, RollingLogViewer viewer) {
+			this.writer = writer;
+			this.viewer = viewer;
+		}
 
-        public void run() {
-            try {
-                while (true) {
-                    final char[] buf = writer.toCharArray();
-                    writer.reset();
-                    if (buf.length > 0) {
-                        viewer.write(buf, 0, buf.length);
-                    }
-                    if (stop) {
-                        break;
-                    }
+		public void run() {
+			try {
+				while (true) {
+					final char[] buf = writer.toCharArray();
+					writer.reset();
 
-                    try {
-                        Thread.sleep(PortletPropsValues.PERMEANCE_LOG_VIEWER_SLEEP_INTERVAL);
-                    } catch (final InterruptedException ie) {
-                    }
-                }
+					if (buf.length > 0) {
+						viewer.write(buf, 0, buf.length);
+					}
 
-            } catch (final Exception e) {
-                log.warn(e);
-            }
-        }
-    }
+					if (stop) {
+						break;
+					}
+
+					try {
+						Thread.sleep(
+							PortletPropsValues.
+								PERMEANCE_LOG_VIEWER_SLEEP_INTERVAL);
+					} catch (final InterruptedException ie) {
+					}
+				}
+
+			} catch (final Exception e) {
+				log.warn(e);
+			}
+		}
+
+		public void setStop(final boolean stop) {
+			this.stop = stop;
+		}
+
+		private boolean stop = false;
+		private final RollingLogViewer viewer;
+		private final CharArrayWriter writer;
+
+	}
+
+	private static boolean attached = false;
+	private static LogRunnable runnable = null;
+	private static RollingLogViewer viewer = null;
+	private static Object writerAppenderObj = null;
 
 }

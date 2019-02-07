@@ -4,14 +4,12 @@
 
 This project provides a portlet that attaches to the Liferay Portal's log4j mechanism to provide a log view within the browser.
 
-
 ## Supported Products
 
 * Liferay Portal 6.1 CE GA2, GA3 (6.1.1+)
 * Liferay Portal 6.1 EE GA2, GA3 (6.1.20+)
 * Liferay Portal 6.2 CE GA1 (6.2.0+)
 * Liferay Portal 6.2 EE GA1 (6.2.10+)
-
 
 ## Downloads
 
@@ -36,12 +34,10 @@ Two portal properties can be set:
 * *permeance.log.viewer.autoattach* to toggle whether the logger attaches automatically on startup, default "true".
 * *permeance.log.viewer.pattern* to configure the log4j pattern, default "%d{ABSOLUTE} %-5p \[%c{1}:%L\] %m%n"
 
-
 ## Plugin Security
 
-This plugin comes with the PACL Security Manager disabled. 
+This plugin comes with the PACL Security Manager disabled.
 However the list of PACL requirements to run this plugin in secure mode is available (commented out) in WEB-INF/liferay-plugin-package.properties. You can uncomment those entries to run the plugin in PACL secure mode.
-
 
 ## Building
 
@@ -56,7 +52,6 @@ Step 2. Build and package
 This will build "liferay-log-viewer-portlet-XXXX.war" in the targets tolder.
 
 NOTE: You will require JDK 1.6+ and Maven 3.
-
 
 ## Installation
 
