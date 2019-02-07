@@ -19,13 +19,7 @@ You can also download or install the portlet from [Liferay Marketplace](http://w
 
 ## Usage
 
-Administrators will see a "Log Viewer" portlet in the Server area of the Control Panel in 6.1.
-In 6.2, it is present in the Apps section of the Control Panel
-Other users can also be assigned permissions to see the Log Viewer Portlet.
-
-![Log Viewer Portlet](/doc/images/log-viewer-screenshot.png "Log Viewer Portlet")
-
-![Log Viewer Portlet](/doc/images/log-viewer-6.2.png "Log Viewer Portlet")
+Administrators will see a "Log Viewer" portlet in the Configuration area of the Control Panel in 7.1.
 
 The portlet polls the log buffer every 2 seconds to update the page with the latest logs.
 You can also attach or detach the logger from the portal log4j. (when detached, the portlet does not cause any overhead on portal operations).
