@@ -1,4 +1,7 @@
+
 # Liferay Log Viewer Portlet
+
+
 
 *liferay-log-viewer-portlet*
 
@@ -6,10 +9,7 @@ This project provides a portlet that attaches to the Liferay Portal's log4j mech
 
 ## Supported Products
 
-* Liferay Portal 6.1 CE GA2, GA3 (6.1.1+)
-* Liferay Portal 6.1 EE GA2, GA3 (6.1.20+)
-* Liferay Portal 6.2 CE GA1 (6.2.0+)
-* Liferay Portal 6.2 EE GA1 (6.2.10+)
+* Liferay Portal 7.1 CE
 
 ## Downloads
 
@@ -19,13 +19,7 @@ You can also download or install the portlet from [Liferay Marketplace](http://w
 
 ## Usage
 
-Administrators will see a "Log Viewer" portlet in the Server area of the Control Panel in 6.1.
-In 6.2, it is present in the Apps section of the Control Panel
-Other users can also be assigned permissions to see the Log Viewer Portlet.
-
-![Log Viewer Portlet](/doc/images/log-viewer-screenshot.png "Log Viewer Portlet")
-
-![Log Viewer Portlet](/doc/images/log-viewer-6.2.png "Log Viewer Portlet")
+Administrators will see a "Log Viewer" portlet in the Configuration area of the Control Panel in 7.1.
 
 The portlet polls the log buffer every 2 seconds to update the page with the latest logs.
 You can also attach or detach the logger from the portal log4j. (when detached, the portlet does not cause any overhead on portal operations).
@@ -39,32 +33,11 @@ Two portal properties can be set:
 This plugin comes with the PACL Security Manager disabled.
 However the list of PACL requirements to run this plugin in secure mode is available (commented out) in WEB-INF/liferay-plugin-package.properties. You can uncomment those entries to run the plugin in PACL secure mode.
 
-## Building
-
-Step 1. Checkout source from GitHub project
-
-    % git  clone  https://github.com/permeance/liferay-log-viewer
-
-Step 2. Build and package
-
-    % mvn  -U  clean  package
-
-This will build "liferay-log-viewer-portlet-XXXX.war" in the targets tolder.
-
-NOTE: You will require JDK 1.6+ and Maven 3.
-
-## Installation
-
-### Liferay Portal + Apache Tomcat Bundle
-
-eg.
-
-Deploy "liferay-log-viewer-portlet-XXXX.war" to "LIFERAY_HOME/deploy" folder.
-
 ## License
 
 Liferay Log Viewer is available under GNU Public License version 3.0 (GPLv3). A copy of the license is attached in the code package.
 
 ## Project Team
 
-* Chun Ho - chun.ho@permeance.com.au
+* Current **me**
+* Original Chun Ho - chun.ho@permeance.com.au
