@@ -29,9 +29,13 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 />
 
 <script type="text/javascript">
+
 	window.errorThreshold = 10;
 	window.consecutiveErrorCount = 0;
 	window.resourcePointer = "-1";
+
+	var preId = '<portlet:namespace/>viewlog';
+
 	function poll() {
 		var resourceMappingUrl = '<portlet:resourceURL/>';
 		AUI().use('aui-io-request', function(A) {
@@ -45,7 +49,7 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 						try {
 							if (typeof this.get('responseData') != 'undefined') {
 								window.resourcePointer = this.get('responseData').pointer;
-								document.getElementById("viewlog").innerHTML = document.getElementById("viewlog").innerHTML + this.get('responseData').content;
+								document.getElementById(preId).innerHTML = document.getElementById(preId).innerHTML + this.get('responseData').content;
 								document.getElementById("viewlogmode").innerHTML = this.get('responseData').mode;
 								window.consecutiveErrorCount=0;
 							} else {
@@ -53,7 +57,7 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 								if (window.consecutiveErrorCount >= window.errorThreshold) {
 									clearTimeout(window.pollingIntervalId);
 									alert("Polling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.");
-									document.getElementById("viewlog").innerHTML = document.getElementById("viewlog").innerHTML + "\n\n\n------\nPolling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.\n------";
+									document.getElementById(preId).innerHTML = document.getElementById(preId).innerHTML + "\n\n\n------\nPolling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.\n------";
 								}
 							}
 						} catch(err) {
@@ -61,7 +65,7 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 							if (window.consecutiveErrorCount >= window.errorThreshold) {
 								clearTimeout(window.pollingIntervalId);
 								alert("Polling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.");
-								document.getElementById("viewlog").innerHTML = document.getElementById("viewlog").innerHTML + "\n\n\n------\nPolling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.\n------";
+								document.getElementById(preId).innerHTML = document.getElementById(preId).innerHTML + "\n\n\n------\nPolling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.\n------";
 							}
 						}
 					},
@@ -70,7 +74,7 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 						if (window.consecutiveErrorCount >= window.errorThreshold) {
 							clearTimeout(window.pollingIntervalId);
 							alert("Polling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.");
-							document.getElementById("viewlog").innerHTML = document.getElementById("viewlog").innerHTML + "\n\n\n------\nPolling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.\n------";
+							document.getElementById(preId).innerHTML = document.getElementById(preId).innerHTML + "\n\n\n------\nPolling of the log has been stopped as the poll error limit has been reached. Please refresh the page to restart polling.\n------";
 						}
 					}
 				}
@@ -129,7 +133,7 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 	<input class="btn btn-secondary btn-sm" onClick="detachlogger(); return false;" type="button" value="<liferay-ui:message key="detach-logger" />" />
 	</div>
 
-	<pre id="viewlog">
+	<pre id="<portlet:namespace/>viewlog">
 	</pre>
 
 	<p>
@@ -140,7 +144,7 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 </div>
 
 <style>
-#viewlog {
+#<portlet:namespace/>viewlog {
 	margin: 10px 0px;
 	min-height: 100px;
 	background-color: #333;
