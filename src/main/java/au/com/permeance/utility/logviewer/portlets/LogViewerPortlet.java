@@ -48,8 +48,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 		immediate = true,
 		property = {
-			"com.liferay.portlet.portlet-name=Liferay Log",
-			"javax.portlet.name=LogViewerPortlet",
+			"com.liferay.portlet.portlet-name=Log viewer",
+			"javax.portlet.name=au_com_permeance_utility_logviewer_LogViewerPortlet",
 			"javax.portlet.display-name=Liferay Log",
 			"com.liferay.portlet.add-default-resource=true",
 			"com.liferay.portlet.css-class-wrapper=portlet-controlpanel",

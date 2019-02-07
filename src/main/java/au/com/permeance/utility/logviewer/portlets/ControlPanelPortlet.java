@@ -25,13 +25,13 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Liferay
+ * @author @baxtheman
  */
 @Component(
 	immediate = true,
 	property = {
 		"panel.category.key=" + PanelCategoryKeys.CONTROL_PANEL_CONFIGURATION,
-		"service.ranking:Integer=100"
+		"service.ranking:Integer=1"
 	},
 	service = PanelApp.class
 )
@@ -39,12 +39,12 @@ public class ControlPanelPortlet extends BasePanelApp {
 
 	@Override
 	public String getPortletId() {
-		return "LogViewerPortlet";
+		return "au_com_permeance_utility_logviewer_LogViewerPortlet";
 	}
 
 	@Override
 	@Reference(
-		target = "(javax.portlet.name=LogViewerPortlet)",
+		target = "(javax.portlet.name=au_com_permeance_utility_logviewer_LogViewerPortlet)",
 		unbind = "-"
 	)
 	public void setPortlet(Portlet portlet) {

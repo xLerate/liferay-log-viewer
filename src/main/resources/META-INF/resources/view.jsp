@@ -1,5 +1,5 @@
 <%--
-Copyright (C) 2013 Permeance Technologies
+Copyright (C) 2019 Daniele Baggio @baxtheman
 
 This program is free software: you can redistribute it and/or modify it under the terms of the
 GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -109,24 +109,42 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 	window.pollingIntervalId = setInterval(poll, <%= String.valueOf(PortletPropsValues.PERMEANCE_LOG_VIEWER_REFRESH_INTERVAL) %>);
 </script>
 
-<liferay-ui:message key="the-logger-is-currently" />
-<span id="viewlogmode"><liferay-ui:message key="waiting-for-status" /></span>.
-<liferay-ui:message arguments="<%= new String[] {PortletPropsValues.PERMEANCE_LOG_VIEWER_REFRESH_INTERVAL_DISPLAY_SECONDS} %>" key="polling-every-x-seconds" />
-<br />
+<div class="container">
 
-<input class="btn btn-primary btn-sm" onClick="attachlogger(); return false;" type="button" value="<liferay-ui:message key="attach-logger" />" />
-<input class="btn btn-secondary btn-sm" onClick="detachlogger(); return false;" type="button" value="<liferay-ui:message key="detach-logger" />" />
+	<div class="alert alert-info" role="alert">
+		<span class="alert-indicator">
+			<svg class="lexicon-icon lexicon-icon-info-circle" focusable="false" role="presentation">
+				<use href="/images/icons/icons.svg#info-circle"></use>
+			</svg>
+		</span>
 
-<pre id="viewlog">
-</pre>
+		<liferay-ui:message key="the-logger-is-currently" />
+		<strong><span id="viewlogmode"><liferay-ui:message key="waiting-for-status" /></span>.</strong>
+		<liferay-ui:message arguments="<%= new String[] {PortletPropsValues.PERMEANCE_LOG_VIEWER_REFRESH_INTERVAL_DISPLAY_SECONDS} %>" key="polling-every-x-seconds" />
+	</div>
 
-<p>
-<em><liferay-ui:message key="you-can-set-portal-property" /> <b>permeance.log.viewer.autoattach</b> <liferay-ui:message key="autoattach-description" /></em><br />
-<em><liferay-ui:message key="you-can-set-portal-property" /> <b>permeance.log.viewer.pattern</b> <liferay-ui:message key="pattern-description" /></em><br /><br />
-</p>
+
+	<div class="navbar navbar-collapse-absolute navbar-expand-md ">
+	<input class="btn btn-primary btn-sm" onClick="attachlogger(); return false;" type="button" value="<liferay-ui:message key="attach-logger" />" />
+	<input class="btn btn-secondary btn-sm" onClick="detachlogger(); return false;" type="button" value="<liferay-ui:message key="detach-logger" />" />
+	</div>
+
+	<pre id="viewlog">
+	</pre>
+
+	<p>
+	<em><liferay-ui:message key="you-can-set-portal-property" /> <b>permeance.log.viewer.autoattach</b> <liferay-ui:message key="autoattach-description" /></em><br />
+	<em><liferay-ui:message key="you-can-set-portal-property" /> <b>permeance.log.viewer.pattern</b> <liferay-ui:message key="pattern-description" /></em><br /><br />
+	</p>
+
+</div>
 
 <style>
 #viewlog {
+	margin: 10px 0px;
+	min-height: 100px;
+	background-color: #333;
+	color: #ccc;
 	font-size: 11px;
 }
 </style>
