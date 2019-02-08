@@ -1,9 +1,7 @@
 
 # Liferay Log Viewer Portlet
 
-
-
-*liferay-log-viewer-portlet*
+## FORK & REVAMP FROM THE ORIGINAL GOOD LOG VIEWER BY Permeance (Thank you!!)
 
 This project provides a portlet that attaches to the Liferay Portal's log4j mechanism to provide a log view within the browser.
 
@@ -20,6 +18,8 @@ You can also download or install the portlet from [Liferay Marketplace](http://w
 ## Usage
 
 Administrators will see a "Log Viewer" portlet in the Configuration area of the Control Panel in 7.1.
+
+![Screenshot](/doc/screenshot.jpg)
 
 The portlet polls the log buffer every 2 seconds to update the page with the latest logs.
 You can also attach or detach the logger from the portal log4j. (when detached, the portlet does not cause any overhead on portal operations).
