@@ -141,7 +141,7 @@ page import="au.com.permeance.utility.logviewer.portlets.PortletPropsValues" %>
 	<input class="btn btn-secondary btn-sm" onClick="detachlogger(); return false;" type="button" value="<liferay-ui:message key="detach-logger" />" />
 	</div>
 
-	<p>
+	<p class="small">
 	<em><liferay-ui:message key="you-can-set-portal-property" /> <b>permeance.log.viewer.autoattach</b> <liferay-ui:message key="autoattach-description" /></em><br />
 	<em><liferay-ui:message key="you-can-set-portal-property" /> <b>permeance.log.viewer.pattern</b> <liferay-ui:message key="pattern-description" /></em><br /><br />
 	</p>
