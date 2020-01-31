@@ -8,11 +8,14 @@ This project provides a portlet that attaches to the Liferay Portal's log4j mech
 ## Supported Products
 
 * Liferay Portal 7.1 CE
+* Liferay Portal 7.1 DXP
 * Liferay Portal 7.2 CE
 
 ## Downloads
 
 Download bundle jar for 7.1.x CE: [au.com.permeance.utility.logviewer-7.1.2.1.jar](https://github.com/baxtheman/liferay-log-viewer/releases/download/7.1.2.1/au.com.permeance.utility.logviewer-7.1.2.1.jar)
+
+Download bundle jar for 7.1.x DXP: [au.com.permeance.utility.logviewer.jar](https://github.com/baxtheman/liferay-log-viewer/releases/download/7.1.2.2/au.com.permeance.utility.logviewer.jar)
 
 Download bundle jar for 7.2.0 CE: [au.com.permeance.utility.logviewer-7.2.0.1.jar](https://github.com/baxtheman/liferay-log-viewer/releases/download/7.2.0.1/au.com.permeance.utility.logviewer-7.2.0.1.jar)
 
