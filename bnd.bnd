@@ -1,4 +1,4 @@
 Bundle-Name: liferay-log-viewer
 Bundle-SymbolicName: au.com.permeance.utility.logviewer
-Bundle-Version: 7.1.2.1
+Bundle-Version: 7.3.0
 -sources: true
